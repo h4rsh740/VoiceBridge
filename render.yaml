@@ -1,0 +1,26 @@
+services:
+  # 1. Express API Backend Web Service
+  - type: web
+    name: voicebridge-backend
+    env: node
+    rootDir: voicebridge/backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false # You will input your MongoDB Atlas cloud URI
+      - key: JWT_SECRET
+        generateValue: true # Render will automatically generate a secure JWT key
+
+  # 2. React Frontend Static Site
+  - type: web
+    name: voicebridge-frontend
+    env: static
+    rootDir: voicebridge/frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://voicebridge-backend.onrender.com/api # Replace with your custom backend domain if changed
