@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceBridge | Smart Civic Node - Digital India</title>
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#39FF14',
+                        secondary: '#00FFFF',
+                        accent: '#FF007F',
+                        dark: {
+                            base: '#05070A',
+                            surface: '#0F131A',
+                            card: 'rgba(15, 19, 26, 0.7)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-dark-base text-white font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden">
+
+    <!-- Header / Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass px-6 py-4 flex justify-between items-center mx-4 mt-4 rounded-2xl border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="viewTab('home')">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.4)] transition-all hover:rotate-12">
+                <span class="font-outfit font-black text-2xl text-black">V</span>
+            </div>
+            <div>
+                <div class="font-outfit font-black text-xl tracking-tighter leading-none">Voice<span class="text-primary">Bridge</span></div>
+                <div class="text-[8px] font-mono text-gray-500 uppercase tracking-widest mt-0.5">Smart Civic Node</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/5">
+            <button onclick="viewTab('home')" id="btn-home" class="tab-btn active px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all">Home Node</button>
+            <button onclick="viewTab('admin')" id="btn-admin" class="tab-btn px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all text-gray-400 hover:text-white">Admin Deck</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Tab: Citizen Node -->
+    <main id="tab-home" class="pt-32 px-4 max-w-4xl mx-auto pb-32 transition-all duration-500">
+        <!-- Hero Section -->
+        <section class="text-center mb-16 animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                National Smart Governance Portal
+            </div>
+            <h1 class="text-5xl md:text-7xl font-outfit font-extrabold tracking-tighter mb-4 leading-none">
+                Speak Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary italic font-black">Civic Needs.</span>
+            </h1>
+            <p class="text-gray-400 text-base md:text-lg mb-12 max-w-xl mx-auto font-medium">
+                AI-driven diagnostic filing system. Convert voice to immediate municipal dispatch in real time.
+            </p>
+            
+            <!-- Voice Complaint Recorder Card -->
+            <div class="glass-premium p-6 md:p-10 rounded-[35px] relative group shadow-2xl">
+                <!-- Recording Status Indicators -->
+                <div class="absolute top-6 right-8 flex items-center gap-2">
+                    <div id="recording-indicator" class="w-2.5 h-2.5 rounded-full bg-gray-700 transition-all"></div>
+                    <span id="recording-status" class="text-[10px] font-mono text-gray-500 uppercase tracking-wider font-bold">Neural Standby</span>
+                </div>
+
+                <!-- Circular Mic Button -->
+                <div class="relative w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+                    <!-- Rotating gradient ring when waiting -->
+                    <div class="absolute inset-0 rounded-full border border-dashed border-white/10 animate-[spin_20s_linear_infinite]"></div>
+                    <button id="mic-btn" class="relative z-10 w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 bg-primary text-black shadow-[0_0_40px_rgba(57,255,20,0.3)] hover:scale-105 active:scale-95 cursor-pointer">
+                        <i data-lucide="mic" class="w-10 h-10 transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Animated Voice Wave visualizer -->
+                <div id="voice-waves" class="voice-wave-container opacity-0 transition-opacity duration-300">
+                    <div class="voice-bar"></div>
+                    <div class="voice-bar"></div>
+                    <div class="voice-bar"></div>
+                    <div class="voice-bar"></div>
+                    <div class="voice-bar"></div>
+                    <div class="voice-bar"></div>
+                </div>
+
+                <!-- Real-Time Speech Display -->
+                <div class="bg-black/40 rounded-2xl p-6 min-h-[140px] border border-white/5 mb-8 text-left relative overflow-hidden mt-6">
+                    <div class="absolute top-2 left-4 text-[9px] font-mono text-gray-600 uppercase tracking-widest">Digital Transcript Stream</div>
+                    <div id="transcript-display" class="text-gray-400 font-medium leading-relaxed italic opacity-60 text-base md:text-lg pt-2 transition-all">
+                        "Click the microphone to start speaking, or choose a simulated civic issue below..."
+                    </div>
+                </div>
+
+                <!-- AI dispatch Initializer Button -->
+                <button id="submit-btn" disabled class="w-full py-4.5 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all duration-300 bg-white/5 text-gray-600 cursor-not-allowed border border-white/5 shadow-lg">
+                    Initialize Diagnostic Dispatch
+                </button>
+            </div>
+        </section>
+
+        <!-- Simulated Quick Triggers (Highly interactive feature) -->
+        <section class="mb-16 animate-fade-in" style="animation-delay: 0.15s">
+            <h3 class="text-center text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">Simulation Triggers (Click to Mock Voice Input)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                <div class="sim-chip flex items-center gap-3" onclick="simulateVoice('Street light not working near Delhi Gate market area')">
+                    <div class="w-8 h-8 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-500">
+                        <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-semibold text-xs tracking-tight">Delhi Gate Pothole/Light Failure</span>
+                </div>
+                <div class="sim-chip flex items-center gap-3" onclick="simulateVoice('Huge potholes on Noida Sector 15 road causing traffic jam')">
+                    <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-semibold text-xs tracking-tight">Noida Sec-15 Road Crack</span>
+                </div>
+                <div class="sim-chip flex items-center gap-3" onclick="simulateVoice('Garbage collection vehicle has not visited Sector 62 for 3 days')">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-semibold text-xs tracking-tight">Sanitation Overflow Sec-62</span>
+                </div>
+                <div class="sim-chip flex items-center gap-3" onclick="simulateVoice('Underground pipeline burst and drinking water leakage in Nehru Place')">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+                        <i data-lucide="droplet" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-semibold text-xs tracking-tight">Water Main Leakage Nehru Place</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Reference Tracking Portal -->
+        <section class="glass rounded-[35px] p-6 md:p-10 border-white/5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/5 rounded-full blur-[80px] -z-10"></div>
+            
+            <h2 class="text-2xl font-outfit font-black mb-8 flex items-center gap-3">
+                <i data-lucide="activity" class="text-primary animate-pulse"></i> Real-time Lifecycle Tracker
+            </h2>
+            <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                <input type="text" id="search-id" placeholder="Enter Complaint Reference ID (e.g. VB-1234)" class="flex-1 bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-sm font-mono focus:border-primary/40 focus:ring-1 focus:ring-primary/20 outline-none transition-all text-white uppercase tracking-wider">
+                <button onclick="trackComplaint()" class="bg-white/10 hover:bg-white/20 text-white hover:text-primary active:scale-95 px-8 py-4 sm:py-0 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all duration-300 border border-white/10">Verify Status</button>
+            </div>
+            
+            <!-- Dynamic Result output gets injected here -->
+            <div id="tracking-result" class="hidden border-t border-white/10 pt-10 animate-slide-up"></div>
+        </section>
+    </main>
+
+    <!-- Main Content Tab: Admin Operation Deck -->
+    <main id="tab-admin" class="hidden pt-32 px-4 max-w-6xl mx-auto pb-32 transition-all duration-500">
+        <!-- Dashboard Intro -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 animate-fade-in">
+            <div>
+                <h2 class="text-4xl font-outfit font-extrabold tracking-tighter mb-2 italic">Operation Deck</h2>
+                <p id="total-count" class="text-gray-500 text-xs font-mono tracking-widest uppercase">Live Civic Stream: 0 Nodes Registered</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="seedMockData()" class="text-[10px] font-bold text-secondary border border-secondary/20 px-4 py-2.5 rounded-lg hover:bg-secondary/10 transition-all uppercase tracking-widest">Load Simulation</button>
+                <button onclick="resetSystem()" class="text-[10px] font-bold text-red-500 border border-red-500/20 px-4 py-2.5 rounded-lg hover:bg-red-500/10 transition-all uppercase tracking-widest">Purge Ledger</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Statistics Counters Grid -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 animate-fade-in" style="animation-delay: 0.1s">
+            <div class="stats-card glass p-6 rounded-2xl border-white/5">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Dispatches</span>
+                    <i data-lucide="database" class="w-4 h-4 text-gray-400"></i>
+                </div>
+                <div id="stat-total" class="text-3xl font-outfit font-extrabold text-white">0</div>
+                <div class="text-[9px] text-gray-600 font-mono mt-1">LIFECYCLE RECORDS</div>
+            </div>
+            <div class="stats-card glass p-6 rounded-2xl border-white/5">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Pending Audit</span>
+                    <i data-lucide="clock" class="w-4 h-4 text-yellow-500 animate-spin"></i>
+                </div>
+                <div id="stat-pending" class="text-3xl font-outfit font-extrabold text-yellow-500">0</div>
+                <div class="text-[9px] text-gray-600 font-mono mt-1">WAITING INSPECTION</div>
+            </div>
+            <div class="stats-card glass p-6 rounded-2xl border-white/5">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Critical Alarms</span>
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500 animate-bounce"></i>
+                </div>
+                <div id="stat-critical" class="text-3xl font-outfit font-extrabold text-red-500">0</div>
+                <div class="text-[9px] text-gray-600 font-mono mt-1">IMMEDIATE ATTENTION</div>
+            </div>
+            <div class="stats-card glass p-6 rounded-2xl border-white/5">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Resolved Nodes</span>
+                    <i data-lucide="check-circle" class="w-4 h-4 text-primary"></i>
+                </div>
+                <div id="stat-resolved" class="text-3xl font-outfit font-extrabold text-primary">0</div>
+                <div class="text-[9px] text-gray-600 font-mono mt-1">TICKET WORK COMPLETED</div>
+            </div>
+        </section>
+
+        <!-- Dynamic SVG Analytics & Charts Panel -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 animate-fade-in" style="animation-delay: 0.15s">
+            <!-- Dynamic SVG Bar Chart Card -->
+            <div class="glass p-6 rounded-3xl border-white/5 lg:col-span-2">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="text-secondary"></i> Department Load Distribution
+                </h3>
+                <div id="chart-container" class="w-full flex items-end justify-between h-48 px-4 border-b border-white/10 pb-2">
+                    <!-- SVG Bars injected here dynamically -->
+                </div>
+                <div class="grid grid-cols-5 text-center mt-3 text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
+                    <div>Electricity</div>
+                    <div>Roads</div>
+                    <div>Sanitation</div>
+                    <div>Water</div>
+                    <div>General</div>
+                </div>
+            </div>
+            
+            <!-- Quick Insights Card -->
+            <div class="glass p-6 rounded-3xl border-white/5 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i data-lucide="cpu" class="text-primary"></i> AI Insights Node
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-gray-400 font-medium">Auto-Parsing Precision</span>
+                            <span class="text-xs font-mono font-bold text-primary">98.4%</span>
+                        </div>
+                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-gray-400 font-medium">Avg Resolution Time</span>
+                            <span class="text-xs font-mono font-bold text-secondary">26.8 Hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-white/5 pt-4 mt-4">
+                    <div class="text-[10px] text-gray-500 font-mono mb-1">NODE GEOLOCATION MATRIX</div>
+                    <div class="text-[11px] text-gray-400 flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="w-3 h-3 text-red-400 animate-ping"></i> Delhi National Capital Region (NCR)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Department Filters Row -->
+        <section class="mb-6 flex flex-wrap gap-2 items-center animate-fade-in" style="animation-delay: 0.2s">
+            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2">Filter Dept:</span>
+            <button onclick="filterAdminList('All')" id="filter-All" class="bg-primary text-black font-bold text-xs uppercase px-4 py-2 rounded-xl transition-all">All</button>
+            <button onclick="filterAdminList('Electricity')" id="filter-Electricity" class="bg-white/5 text-gray-400 font-bold text-xs uppercase px-4 py-2 rounded-xl hover:bg-white/10 transition-all">Electricity</button>
+            <button onclick="filterAdminList('Roads')" id="filter-Roads" class="bg-white/5 text-gray-400 font-bold text-xs uppercase px-4 py-2 rounded-xl hover:bg-white/10 transition-all">Roads</button>
+            <button onclick="filterAdminList('Sanitation')" id="filter-Sanitation" class="bg-white/5 text-gray-400 font-bold text-xs uppercase px-4 py-2 rounded-xl hover:bg-white/10 transition-all">Sanitation</button>
+            <button onclick="filterAdminList('Water')" id="filter-Water" class="bg-white/5 text-gray-400 font-bold text-xs uppercase px-4 py-2 rounded-xl hover:bg-white/10 transition-all">Water</button>
+            <button onclick="filterAdminList('General')" id="filter-General" class="bg-white/5 text-gray-400 font-bold text-xs uppercase px-4 py-2 rounded-xl hover:bg-white/10 transition-all">General</button>
+        </section>
+
+        <!-- Live Dispatches List container -->
+        <div id="admin-list" class="grid grid-cols-1 gap-6 animate-fade-in" style="animation-delay: 0.25s">
+            <!-- Dynamic Admin cards injected here -->
+        </div>
+    </main>
+
+    <!-- Toast Notification Overlay -->
+    <div id="notification" class="fixed bottom-10 left-1/2 -translate-x-1/2 glass px-6 md:px-8 py-4 rounded-3xl border-primary/30 flex items-center gap-4 z-[100] shadow-2xl opacity-0 translate-y-20 transition-all duration-300 pointer-events-none">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-black shadow-[0_0_15px_rgba(57,255,20,0.5)]">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <div id="notify-msg" class="text-xs md:text-sm font-bold text-white">Digital Dispatch Initialized</div>
+            <div id="notify-id" class="text-[9px] text-gray-400 font-mono mt-0.5">NODE ID: VB-0000</div>
+        </div>
+    </div>
+
+    <!-- Cosmic Background Grids and Blurs -->
+    <div class="fixed inset-0 bg-grid -z-20 opacity-30 pointer-events-none"></div>
+    <div class="fixed top-0 left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-primary/5 rounded-full blur-[140px] -z-10 pointer-events-none animate-[pulse_10s_ease-in-out_infinite]"></div>
+    <div class="fixed bottom-0 right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-secondary/5 rounded-full blur-[120px] -z-10 pointer-events-none animate-[pulse_8s_ease-in-out_infinite]"></div>
+
+    <!-- Root JS Script -->
+    <script src="app.js"></script>
+</body>
+</html>

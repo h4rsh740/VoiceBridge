@@ -1,0 +1,239 @@
+:root {
+    --primary: #39FF14;
+    --secondary: #00FFFF;
+    --accent: #FF007F;
+    --dark-base: #05070A;
+    --dark-surface: #0F131A;
+    --dark-card: rgba(15, 19, 26, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--dark-base);
+    color: #e2e8f0;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+    background: var(--dark-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+}
+
+.glass-premium {
+    background: linear-gradient(135deg, rgba(15, 19, 26, 0.8) 0%, rgba(10, 12, 18, 0.9) 100%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Glow effects */
+.glow-primary {
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+}
+.glow-secondary {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* Grid Background */
+.bg-grid {
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+}
+
+/* Voice Wave Animation styles */
+.voice-wave-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    margin-top: 15px;
+}
+
+.voice-bar {
+    width: 4px;
+    height: 8px;
+    background: linear-gradient(to top, var(--primary), var(--secondary));
+    border-radius: 4px;
+    transition: height 0.1s ease;
+}
+
+.voice-wave-container.active .voice-bar {
+    animation: bounce 1.2s ease-in-out infinite alternate;
+}
+
+.voice-wave-container.active .voice-bar:nth-child(1) { animation-delay: 0.1s; }
+.voice-wave-container.active .voice-bar:nth-child(2) { animation-delay: 0.3s; }
+.voice-wave-container.active .voice-bar:nth-child(3) { animation-delay: 0.6s; }
+.voice-wave-container.active .voice-bar:nth-child(4) { animation-delay: 0.2s; }
+.voice-wave-container.active .voice-bar:nth-child(5) { animation-delay: 0.5s; }
+.voice-wave-container.active .voice-bar:nth-child(6) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    0% { height: 6px; }
+    100% { height: 36px; }
+}
+
+/* Custom dynamic indicators */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+}
+
+.status-registered { color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+.status-assigned { color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+.status-inspection { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+.status-repair { color: #ec4899; background: rgba(236, 72, 153, 0.1); }
+.status-resolved { color: var(--primary); background: rgba(57, 255, 20, 0.1); }
+
+/* Progress Workflow Node styling */
+.workflow-step {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.workflow-step.completed .node-circle {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+    color: black;
+}
+
+.workflow-step.active .node-circle {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    box-shadow: 0 0 20px var(--secondary);
+    color: black;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+}
+
+/* General animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulse-red {
+    0%, 100% { background-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+    50% { background-color: #dc2626; box-shadow: 0 0 35px rgba(239, 68, 68, 0.9); }
+}
+
+.animate-pulse-red {
+    animation: pulse-red 1.5s infinite;
+}
+
+/* Interactive SVG Chart styling */
+.chart-bar {
+    transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), fill 0.3s;
+    cursor: pointer;
+}
+.chart-bar:hover {
+    fill: var(--secondary) !important;
+}
+
+/* Quick simulation tags styling */
+.sim-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.sim-chip:hover {
+    background: rgba(57, 255, 20, 0.05);
+    border-color: rgba(57, 255, 20, 0.3);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--dark-base);
+}
+::-webkit-scrollbar-thumb {
+    background: #1E2530;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Tab styling and hidden visibility */
+main.hidden {
+    display: none !important;
+}
+
+.tab-btn {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-btn.active {
+    background-color: var(--primary) !important;
+    color: black !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+}
+
+.stats-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+}
+.stats-card:hover::before {
+    transform: translateX(100%);
+}
+.stats-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.12);
+}
